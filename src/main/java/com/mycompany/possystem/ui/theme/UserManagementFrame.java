@@ -20,7 +20,7 @@ public class UserManagementFrame extends javax.swing.JFrame {
     initComponents();
 
     // ── Window settings ──────────────────────────────────────────────
-    setTitle("RetailPro POS — User Management");
+    setTitle("InterTech POS — User Management");
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -42,12 +42,26 @@ public class UserManagementFrame extends javax.swing.JFrame {
     lblTitle.setForeground(AppTheme.TEXT_PRI);
     lblTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 20));
 
+    topBar.setLayout(new java.awt.BorderLayout());
     topBar.removeAll();
-    topBar.add(lblTitle);
-    topBar.add(btnDashboard);
-    topBar.add(btnAddUser);
-    topBar.add(btnToggleActive);
-    topBar.add(btnResetPassword);
+
+    javax.swing.JPanel umLeft = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+    umLeft.setBackground(AppTheme.BG_PANEL);
+    umLeft.setOpaque(true);
+    umLeft.add(AppTheme.makeNavBrand());
+
+    javax.swing.JPanel umRight = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 12));
+    umRight.setBackground(AppTheme.BG_PANEL);
+    umRight.setOpaque(true);
+    umRight.add(btnAddUser);
+    umRight.add(btnToggleActive);
+    umRight.add(btnResetPassword);
+    umRight.add(btnDashboard);
+
+    topBar.add(umLeft,  java.awt.BorderLayout.WEST);
+    topBar.add(umRight, java.awt.BorderLayout.EAST);
     getContentPane().add(topBar,       java.awt.BorderLayout.NORTH);
     javax.swing.JPanel tableContainer = new javax.swing.JPanel(
     new java.awt.BorderLayout());

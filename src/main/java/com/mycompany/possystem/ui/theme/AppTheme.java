@@ -164,13 +164,26 @@ public class AppTheme {
     public static void styleNavButton(JButton btn, String text) {
         btn.setText(text);
         btn.setBackground(BG_PANEL);
-        btn.setForeground(TEXT_PRI);
+        btn.setForeground(TEXT_SEC);
         btn.setFont(FONT_NAV);
         btn.setBorderPainted(false);
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setBorder(BorderFactory.createEmptyBorder(8, 20, 8, 20));
-        addHoverEffect(btn, BG_PANEL, BG_HOVER);
+        btn.setBorder(BorderFactory.createEmptyBorder(0, 22, 0, 22));
+        btn.setPreferredSize(new java.awt.Dimension(
+            btn.getPreferredSize().width + 44, 64));
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent e) {
+                btn.setBackground(BG_HOVER);
+                btn.setForeground(TEXT_PRI);
+            }
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent e) {
+                btn.setBackground(BG_PANEL);
+                btn.setForeground(TEXT_SEC);
+            }
+        });
     }
 
     // ── Style a primary action button ─────────────────────────────────
@@ -196,5 +209,72 @@ public class AppTheme {
         c.setForeground(TEXT_PRI);
         c.setFont(FONT_BODY);
         c.setOpaque(true);
+    }
+
+    // ── Style a scroll pane with dark theme ───────────────────────────
+    public static void styleScrollPane(javax.swing.JScrollPane sp) {
+        sp.setBorder(BorderFactory.createLineBorder(BORDER, 1));
+        sp.getViewport().setBackground(BG_CARD);
+        sp.setBackground(BG_DARK);
+        sp.getVerticalScrollBar().setOpaque(true);
+        sp.getVerticalScrollBar().setPreferredSize(
+            new java.awt.Dimension(8, 0));
+        sp.getVerticalScrollBar().setUI(
+            new javax.swing.plaf.basic.BasicScrollBarUI() {
+                @Override protected void configureScrollBarColors() {
+                    thumbColor = BG_HOVER;
+                    trackColor = BG_PANEL;
+                }
+                @Override protected JButton createDecreaseButton(int o) {
+                    JButton b = new JButton();
+                    b.setPreferredSize(new java.awt.Dimension(0, 0));
+                    return b;
+                }
+                @Override protected JButton createIncreaseButton(int o) {
+                    JButton b = new JButton();
+                    b.setPreferredSize(new java.awt.Dimension(0, 0));
+                    return b;
+                }
+            });
+    }
+
+    // ── Make a branded nav panel (64px tall, vertically centered) ────
+    public static javax.swing.JPanel makeNavBrand() {
+        // Outer wrapper: 64px tall so it aligns with nav buttons
+        javax.swing.JPanel wrapper = new javax.swing.JPanel(
+            new java.awt.GridBagLayout());
+        wrapper.setOpaque(false);
+        wrapper.setPreferredSize(new java.awt.Dimension(210, 64));
+
+        // Inner content: icon + name side by side
+        javax.swing.JPanel inner = new javax.swing.JPanel(
+            new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 8, 0));
+        inner.setOpaque(false);
+        inner.setBorder(BorderFactory.createEmptyBorder(0, 16, 0, 8));
+
+        JLabel icon = new JLabel("⚡");
+        icon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 16));
+        icon.setForeground(BG_DARK);
+        icon.setOpaque(true);
+        icon.setBackground(ACCENT);
+        icon.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+
+        JLabel text = new JLabel("InterTech POS");
+        text.setFont(new Font("Segoe UI", Font.BOLD, 15));
+        text.setForeground(TEXT_PRI);
+
+        inner.add(icon);
+        inner.add(text);
+        wrapper.add(inner); // GridBagLayout centers it in the 64px wrapper
+        return wrapper;
+    }
+
+    // ── Make a section header label ───────────────────────────────────
+    public static JLabel makeSectionHeader(String text) {
+        JLabel lbl = new JLabel(text.toUpperCase());
+        lbl.setFont(new Font("Segoe UI", Font.BOLD, 11));
+        lbl.setForeground(TEXT_SEC);
+        lbl.setBorder(BorderFactory.createEmptyBorder(0, 2, 8, 0));
+        return lbl;
     }
 }

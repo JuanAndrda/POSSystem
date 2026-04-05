@@ -20,7 +20,7 @@ public class InventoryFrame extends javax.swing.JFrame {
     initComponents();
 
     // ── Window settings ──────────────────────────────────────────────
-    setTitle("RetailPro POS — Inventory");
+    setTitle("InterTech POS — Inventory");
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -52,27 +52,44 @@ public class InventoryFrame extends javax.swing.JFrame {
     tableContainer.add(scrollInventory, java.awt.BorderLayout.CENTER);
     getContentPane().add(scrollInventory,  java.awt.BorderLayout.CENTER);
 
-    // Fix topBar layout
-    topBar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 10, 10));
+    // Fix topBar layout — LEFT: title + actions | RIGHT: filter + back
+    topBar.setLayout(new java.awt.BorderLayout());
     topBar.setBorder(javax.swing.BorderFactory.createMatteBorder(
-        0, 0, 2, 0, AppTheme.BORDER));
+        0, 0, 1, 0, AppTheme.BORDER));
     topBar.setPreferredSize(new java.awt.Dimension(0, 64));
+    topBar.removeAll();
 
-    // Add a title label to the left
+    // Left section: title + action buttons
+    javax.swing.JPanel topLeft = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 8, 12));
+    topLeft.setBackground(AppTheme.BG_PANEL);
+    topLeft.setOpaque(true);
+
     javax.swing.JLabel lblTitle = new javax.swing.JLabel("Inventory Management");
     lblTitle.setFont(AppTheme.FONT_HEADING);
     lblTitle.setForeground(AppTheme.TEXT_PRI);
-    lblTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 20));
+    lblTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 12, 0, 16));
 
-    // Re-add all components in correct order
-    topBar.removeAll();
-    topBar.add(lblTitle);
-    topBar.add(btnAdd);
-    topBar.add(btnEdit);
-    topBar.add(btnDelete);
-    topBar.add(btnRefresh);
-    topBar.add(btnDashboard);
-    topBar.add(txtFilter);
+    topLeft.add(lblTitle);
+    topLeft.add(btnAdd);
+    topLeft.add(btnEdit);
+    topLeft.add(btnDelete);
+    topLeft.add(btnRefresh);
+
+    // Right section: search field + back button
+    javax.swing.JPanel topRight = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 12));
+    topRight.setBackground(AppTheme.BG_PANEL);
+    topRight.setOpaque(true);
+
+    javax.swing.JLabel lblSearch = new javax.swing.JLabel("🔍");
+    lblSearch.setForeground(AppTheme.TEXT_SEC);
+    topRight.add(lblSearch);
+    topRight.add(txtFilter);
+    topRight.add(btnDashboard);
+
+    topBar.add(topLeft,  java.awt.BorderLayout.WEST);
+    topBar.add(topRight, java.awt.BorderLayout.EAST);
 
     // ── Inventory table ──────────────────────────────────────────────
     tblInventory.setModel(new javax.swing.table.DefaultTableModel(
@@ -105,9 +122,9 @@ public class InventoryFrame extends javax.swing.JFrame {
         .setMaxWidth(0);
     tblInventory.getColumnModel().getColumn(0)
         .setWidth(0);
-    scrollInventory.getViewport().setBackground(AppTheme.BG_CARD);
+    AppTheme.styleScrollPane(scrollInventory);
     scrollInventory.setBorder(javax.swing.BorderFactory.createEmptyBorder(
-    16, 20, 20, 20));
+        16, 20, 20, 20));
 
     // Color code rows by stock level
     tblInventory.setDefaultRenderer(Object.class,

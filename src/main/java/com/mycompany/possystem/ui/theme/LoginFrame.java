@@ -23,31 +23,50 @@ public class LoginFrame extends javax.swing.JFrame {
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setResizable(false);
 
-    // ── Override layout with clean centered GridBagLayout ────────────
-    mainPanel.setLayout(new java.awt.GridBagLayout());
+    // ── Outer background ─────────────────────────────────────────────
+    getContentPane().setBackground(AppTheme.BG_DARK);
     mainPanel.setBackground(AppTheme.BG_DARK);
+    mainPanel.setLayout(new java.awt.GridBagLayout());
+
+    // ── Floating card ────────────────────────────────────────────────
+    javax.swing.JPanel card = new javax.swing.JPanel(
+        new java.awt.GridBagLayout());
+    card.setBackground(AppTheme.BG_PANEL);
+    card.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        AppTheme.roundedBorder(18, AppTheme.BORDER),
+        javax.swing.BorderFactory.createEmptyBorder(0, 0, 0, 0)
+    ));
+
     java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
     gbc.gridx = 0;
     gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-    gbc.insets = new java.awt.Insets(6, 10, 6, 10);
+
+    // ── Accent top bar on card ────────────────────────────────────────
+    javax.swing.JPanel cardAccent = new javax.swing.JPanel();
+    cardAccent.setBackground(AppTheme.ACCENT);
+    cardAccent.setPreferredSize(new java.awt.Dimension(0, 4));
+    cardAccent.setOpaque(true);
+    gbc.gridy = 0;
+    gbc.insets = new java.awt.Insets(0, 0, 0, 0);
+    card.add(cardAccent, gbc);
 
     // ── Logo ─────────────────────────────────────────────────────────
     lblLogo.setText("⚡");
-    lblLogo.setFont(new java.awt.Font("Segoe UI Emoji", java.awt.Font.PLAIN, 56));
+    lblLogo.setFont(new java.awt.Font("Segoe UI Emoji", java.awt.Font.PLAIN, 52));
     lblLogo.setForeground(AppTheme.ACCENT);
     lblLogo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    gbc.gridy = 0;
-    gbc.insets = new java.awt.Insets(40, 30, 6, 30);
-    mainPanel.add(lblLogo, gbc);
+    gbc.gridy = 1;
+    gbc.insets = new java.awt.Insets(36, 40, 4, 40);
+    card.add(lblLogo, gbc);
 
     // ── Title ────────────────────────────────────────────────────────
     lblTitle.setText("InterTech POS");
-    lblTitle.setFont(AppTheme.FONT_TITLE);
+    lblTitle.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 26));
     lblTitle.setForeground(AppTheme.ACCENT);
     lblTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    gbc.gridy = 1;
-    gbc.insets = new java.awt.Insets(0, 30, 4, 30);
-    mainPanel.add(lblTitle, gbc);
+    gbc.gridy = 2;
+    gbc.insets = new java.awt.Insets(0, 40, 2, 40);
+    card.add(lblTitle, gbc);
 
     // ── Subtitle ─────────────────────────────────────────────────────
     javax.swing.JLabel lblSubtitle = new javax.swing.JLabel(
@@ -55,65 +74,82 @@ public class LoginFrame extends javax.swing.JFrame {
     lblSubtitle.setFont(AppTheme.FONT_SMALL);
     lblSubtitle.setForeground(AppTheme.TEXT_SEC);
     lblSubtitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    gbc.gridy = 2;
-    gbc.insets = new java.awt.Insets(0, 30, 30, 30);
-    mainPanel.add(lblSubtitle, gbc);
+    gbc.gridy = 3;
+    gbc.insets = new java.awt.Insets(0, 40, 28, 40);
+    card.add(lblSubtitle, gbc);
+
+    // ── Divider ───────────────────────────────────────────────────────
+    javax.swing.JSeparator sep = new javax.swing.JSeparator();
+    sep.setForeground(AppTheme.BORDER);
+    sep.setBackground(AppTheme.BORDER);
+    gbc.gridy = 4;
+    gbc.insets = new java.awt.Insets(0, 0, 20, 0);
+    card.add(sep, gbc);
 
     // ── Username label ───────────────────────────────────────────────
-    lblUsername.setText("Username");
-    lblUsername.setFont(AppTheme.FONT_SMALL);
+    lblUsername.setText("USERNAME");
+    lblUsername.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 11));
     lblUsername.setForeground(AppTheme.TEXT_SEC);
-    gbc.gridy = 3;
-    gbc.insets = new java.awt.Insets(0, 30, 4, 30);
-    mainPanel.add(lblUsername, gbc);
+    gbc.gridy = 5;
+    gbc.insets = new java.awt.Insets(0, 36, 5, 36);
+    card.add(lblUsername, gbc);
 
     // ── Username field ───────────────────────────────────────────────
     AppTheme.styleField(txtUsername);
     txtUsername.setPreferredSize(new java.awt.Dimension(0, 44));
-    gbc.gridy = 4;
-    gbc.insets = new java.awt.Insets(0, 30, 16, 30);
-    mainPanel.add(txtUsername, gbc);
+    gbc.gridy = 6;
+    gbc.insets = new java.awt.Insets(0, 36, 16, 36);
+    card.add(txtUsername, gbc);
 
     // ── Password label ───────────────────────────────────────────────
-    lblPassword.setText("Password");
-    lblPassword.setFont(AppTheme.FONT_SMALL);
+    lblPassword.setText("PASSWORD");
+    lblPassword.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 11));
     lblPassword.setForeground(AppTheme.TEXT_SEC);
-    gbc.gridy = 5;
-    gbc.insets = new java.awt.Insets(0, 30, 4, 30);
-    mainPanel.add(lblPassword, gbc);
+    gbc.gridy = 7;
+    gbc.insets = new java.awt.Insets(0, 36, 5, 36);
+    card.add(lblPassword, gbc);
 
     // ── Password field ───────────────────────────────────────────────
     AppTheme.styleField(txtPassword);
     txtPassword.setPreferredSize(new java.awt.Dimension(0, 44));
-    gbc.gridy = 6;
-    gbc.insets = new java.awt.Insets(0, 30, 24, 30);
-    mainPanel.add(txtPassword, gbc);
+    gbc.gridy = 8;
+    gbc.insets = new java.awt.Insets(0, 36, 24, 36);
+    card.add(txtPassword, gbc);
 
     // ── Login button ─────────────────────────────────────────────────
     AppTheme.stylePrimaryButton(btnLogin, "LOG IN", AppTheme.ACCENT_BTN);
-    btnLogin.setFont(AppTheme.FONT_HEADING);
+    btnLogin.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 15));
+    btnLogin.setForeground(java.awt.Color.WHITE);
     btnLogin.setPreferredSize(new java.awt.Dimension(0, 48));
-    gbc.gridy = 7;
-    gbc.insets = new java.awt.Insets(0, 30, 12, 30);
-    mainPanel.add(btnLogin, gbc);
+    gbc.gridy = 9;
+    gbc.insets = new java.awt.Insets(0, 36, 10, 36);
+    card.add(btnLogin, gbc);
 
     // ── Status label ─────────────────────────────────────────────────
     lblStatus.setText(" ");
     lblStatus.setFont(AppTheme.FONT_SMALL);
     lblStatus.setForeground(AppTheme.DANGER);
     lblStatus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    gbc.gridy = 8;
-    gbc.insets = new java.awt.Insets(0, 30, 40, 30);
-    mainPanel.add(lblStatus, gbc);
+    gbc.gridy = 10;
+    gbc.insets = new java.awt.Insets(0, 36, 4, 36);
+    card.add(lblStatus, gbc);
 
-    // ── Bottom version label ──────────────────────────────────────────
+    // ── Version ───────────────────────────────────────────────────────
     javax.swing.JLabel lblVersion = new javax.swing.JLabel("v1.0.0");
     lblVersion.setFont(AppTheme.FONT_SMALL);
     lblVersion.setForeground(new java.awt.Color(0x2A4060));
     lblVersion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-    gbc.gridy = 9;
-    gbc.insets = new java.awt.Insets(0, 30, 16, 30);
-    mainPanel.add(lblVersion, gbc);
+    gbc.gridy = 11;
+    gbc.insets = new java.awt.Insets(0, 36, 28, 36);
+    card.add(lblVersion, gbc);
+
+    // ── Add card to mainPanel centered ───────────────────────────────
+    java.awt.GridBagConstraints outer = new java.awt.GridBagConstraints();
+    outer.gridx = 0; outer.gridy = 0;
+    outer.fill = java.awt.GridBagConstraints.NONE;
+    outer.anchor = java.awt.GridBagConstraints.CENTER;
+    outer.ipadx = 60;
+    mainPanel.add(card, outer);
 
     // ── Press Enter to login ──────────────────────────────────────────
     getRootPane().setDefaultButton(btnLogin);

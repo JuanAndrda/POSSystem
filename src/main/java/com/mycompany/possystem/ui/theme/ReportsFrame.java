@@ -19,7 +19,7 @@ public class ReportsFrame extends javax.swing.JFrame {
     initComponents();
 
     // ── Window settings ──────────────────────────────────────────────
-    setTitle("RetailPro POS — Sales Reports");
+    setTitle("InterTech POS — Sales Reports");
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -46,13 +46,27 @@ public class ReportsFrame extends javax.swing.JFrame {
     lblTitle.setForeground(AppTheme.TEXT_PRI);
     lblTitle.setBorder(javax.swing.BorderFactory.createEmptyBorder(0, 8, 0, 20));
 
+    topBar.setLayout(new java.awt.BorderLayout());
     topBar.removeAll();
-    topBar.add(lblTitle);
-    topBar.add(btnDashboard);
-    topBar.add(btnDaily);
-    topBar.add(btnWeekly);
-    topBar.add(btnMonthly);
-    topBar.add(btnAll);
+
+    javax.swing.JPanel rptLeft = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+    rptLeft.setBackground(AppTheme.BG_PANEL);
+    rptLeft.setOpaque(true);
+    rptLeft.add(AppTheme.makeNavBrand());
+
+    javax.swing.JPanel rptRight = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 8, 12));
+    rptRight.setBackground(AppTheme.BG_PANEL);
+    rptRight.setOpaque(true);
+    rptRight.add(btnDaily);
+    rptRight.add(btnWeekly);
+    rptRight.add(btnMonthly);
+    rptRight.add(btnAll);
+    rptRight.add(btnDashboard);
+
+    topBar.add(rptLeft,  java.awt.BorderLayout.WEST);
+    topBar.add(rptRight, java.awt.BorderLayout.EAST);
     getContentPane().add(topBar, java.awt.BorderLayout.NORTH);
 
     // Stats panel
@@ -97,9 +111,7 @@ public class ReportsFrame extends javax.swing.JFrame {
         public boolean isCellEditable(int r, int c) { return false; }
     });
     AppTheme.styleTable(tblReports);
-    scrollReports.getViewport().setBackground(AppTheme.BG_CARD);
-    scrollReports.setBorder(javax.swing.BorderFactory
-        .createLineBorder(AppTheme.BORDER));
+    AppTheme.styleScrollPane(scrollReports);
 
     // ── Button actions ───────────────────────────────────────────────
     btnDashboard.addActionListener(e -> {

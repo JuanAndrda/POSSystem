@@ -13,7 +13,7 @@ public class DatabaseConnection {
  
     // ── Connection settings ─────────────────────────────────────────────
     private static final String HOST     = "localhost";
-    private static final String PORT     = "3306";      // change to 3307 if needed
+    private static final String PORT     = "3307";      // slave/master setup uses 3307
     private static final String DB_NAME  = "pos_system";
     private static final String USER     = "root";      // XAMPP default
     private static final String PASSWORD = "";           // XAMPP default (blank)

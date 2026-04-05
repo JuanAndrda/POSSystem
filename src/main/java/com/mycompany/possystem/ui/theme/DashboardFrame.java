@@ -19,7 +19,7 @@ public class DashboardFrame extends javax.swing.JFrame {
     initComponents();
 
     // ── Window settings ──────────────────────────────────────────────
-    setTitle("RetailPro POS — Dashboard");
+    setTitle("InterTech POS — Dashboard");
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -40,8 +40,20 @@ public class DashboardFrame extends javax.swing.JFrame {
     btnInventory.setVisible(com.mycompany.possystem.util.SessionManager.isAdmin());
     btnReports.setVisible(com.mycompany.possystem.util.SessionManager.isAdmin());
 
-    // Make logout button red
+    // Style logout button distinctly
+    btnLogout.setText("Logout");
+    btnLogout.setBackground(new java.awt.Color(0x3B0011));
     btnLogout.setForeground(AppTheme.DANGER);
+    btnLogout.setFont(AppTheme.FONT_NAV);
+    btnLogout.setBorderPainted(false);
+    btnLogout.setFocusPainted(false);
+    btnLogout.setCursor(java.awt.Cursor.getPredefinedCursor(
+        java.awt.Cursor.HAND_CURSOR));
+    btnLogout.setBorder(javax.swing.BorderFactory.createEmptyBorder(
+        0, 18, 0, 18));
+    btnLogout.setPreferredSize(new java.awt.Dimension(100, 64));
+    AppTheme.addHoverEffect(btnLogout,
+        new java.awt.Color(0x3B0011), new java.awt.Color(0x5C0018));
 
     // ── Welcome label ────────────────────────────────────────────────
     String name = com.mycompany.possystem.util.SessionManager
@@ -60,9 +72,7 @@ public class DashboardFrame extends javax.swing.JFrame {
         public boolean isCellEditable(int r, int c) { return false; }
     });
     AppTheme.styleTable(jTable1);
-    scrollRecent.getViewport().setBackground(AppTheme.BG_CARD);
-    scrollRecent.setBorder(javax.swing.BorderFactory
-        .createLineBorder(AppTheme.BORDER));
+    AppTheme.styleScrollPane(scrollRecent);
 
     // ── Fix layout ───────────────────────────────────────────────────
     fixLayout();
@@ -113,8 +123,80 @@ private void fixLayout() {
     getContentPane().add(navBar, java.awt.BorderLayout.NORTH);
     getContentPane().add(mainPanel, java.awt.BorderLayout.CENTER);
 
-    navBar.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 4, 8));
-    navBar.setPreferredSize(new java.awt.Dimension(0, 58));
+    // ── Nav bar: brand LEFT | buttons CENTER | user+logout RIGHT ─────
+    navBar.setLayout(new java.awt.BorderLayout());
+    navBar.setPreferredSize(new java.awt.Dimension(0, 64));
+
+    // Brand (GridBagLayout so the 64px wrapper centers naturally)
+    javax.swing.JPanel navLeft = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+    navLeft.setBackground(AppTheme.BG_PANEL);
+    navLeft.setOpaque(true);
+    navLeft.setPreferredSize(new java.awt.Dimension(210, 64));
+    navLeft.add(AppTheme.makeNavBrand());
+
+    // Center nav buttons
+    javax.swing.JPanel navCenter = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 0, 0));
+    navCenter.setBackground(AppTheme.BG_PANEL);
+    navCenter.setOpaque(true);
+    navCenter.add(btnPOS);
+    navCenter.add(btnInventory);
+    navCenter.add(btnReports);
+    navCenter.add(btnUsers);
+
+    // Right: user chip + logout
+    com.mycompany.possystem.model.User currentSession =
+        com.mycompany.possystem.util.SessionManager.getCurrentUser();
+    String currentUser = currentSession != null
+        ? currentSession.getFullName() : "User";
+    String currentRole = currentSession != null
+        ? currentSession.getRole().toUpperCase() : "";
+
+    // Role badge
+    javax.swing.JLabel lblRole = new javax.swing.JLabel(currentRole);
+    lblRole.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 10));
+    lblRole.setForeground(AppTheme.BG_DARK);
+    lblRole.setBackground(AppTheme.SUCCESS);
+    lblRole.setOpaque(true);
+    lblRole.setBorder(javax.swing.BorderFactory.createEmptyBorder(2, 6, 2, 6));
+
+    // Name label
+    javax.swing.JLabel lblUserName = new javax.swing.JLabel(currentUser);
+    lblUserName.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 13));
+    lblUserName.setForeground(AppTheme.TEXT_PRI);
+
+    // User chip (inner)
+    javax.swing.JPanel userChip = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.LEFT, 6, 0));
+    userChip.setBackground(AppTheme.BG_CARD);
+    userChip.setOpaque(true);
+    userChip.setBorder(javax.swing.BorderFactory.createCompoundBorder(
+        AppTheme.roundedBorder(8, AppTheme.BORDER),
+        javax.swing.BorderFactory.createEmptyBorder(6, 10, 6, 10)
+    ));
+    userChip.add(lblUserName);
+    userChip.add(lblRole);
+
+    // Wrapper: 64px tall so it matches nav buttons height
+    javax.swing.JPanel chipWrapper = new javax.swing.JPanel(
+        new java.awt.GridBagLayout());
+    chipWrapper.setBackground(AppTheme.BG_PANEL);
+    chipWrapper.setOpaque(true);
+    chipWrapper.setPreferredSize(new java.awt.Dimension(
+        userChip.getPreferredSize().width + 28, 64));
+    chipWrapper.add(userChip); // GridBagLayout centers it vertically
+
+    javax.swing.JPanel navRight = new javax.swing.JPanel(
+        new java.awt.FlowLayout(java.awt.FlowLayout.RIGHT, 0, 0));
+    navRight.setBackground(AppTheme.BG_PANEL);
+    navRight.setOpaque(true);
+    navRight.add(chipWrapper);
+    navRight.add(btnLogout);
+
+    navBar.add(navLeft,   java.awt.BorderLayout.WEST);
+    navBar.add(navCenter, java.awt.BorderLayout.CENTER);
+    navBar.add(navRight,  java.awt.BorderLayout.EAST);
 
     mainPanel.setLayout(new java.awt.BorderLayout(0, 0));
     mainPanel.setBorder(javax.swing.BorderFactory
@@ -166,12 +248,10 @@ private void fixLayout() {
     topSection.add(cardsRow,   java.awt.BorderLayout.CENTER);
 
     // Recent section
-    javax.swing.JLabel lblRecent = new javax.swing.JLabel(
-        "RECENT TRANSACTIONS");
-    lblRecent.setFont(AppTheme.FONT_SMALL);
-    lblRecent.setForeground(AppTheme.TEXT_SEC);
+    javax.swing.JLabel lblRecent = AppTheme.makeSectionHeader(
+        "Recent Transactions");
     lblRecent.setBorder(javax.swing.BorderFactory
-        .createEmptyBorder(0, 0, 10, 0));
+        .createEmptyBorder(0, 2, 10, 0));
 
     javax.swing.JPanel bottomSection = new javax.swing.JPanel(
         new java.awt.BorderLayout(0, 0));
@@ -187,26 +267,34 @@ private void setupCard(javax.swing.JPanel card, String label,
                         String value, java.awt.Color accent) {
     card.setBackground(AppTheme.BG_CARD);
     card.setLayout(new java.awt.BorderLayout());
-    card.setBorder(javax.swing.BorderFactory.createCompoundBorder(
-        AppTheme.roundedBorder(12, AppTheme.BORDER),
-        javax.swing.BorderFactory.createEmptyBorder(18, 20, 18, 20)
-    ));
+    card.setBorder(AppTheme.roundedBorder(12, AppTheme.BORDER));
+
+    // Colored accent bar at top
+    javax.swing.JPanel accentBar = new javax.swing.JPanel();
+    accentBar.setBackground(accent);
+    accentBar.setPreferredSize(new java.awt.Dimension(0, 4));
+    accentBar.setOpaque(true);
+
+    // Content area
+    javax.swing.JPanel inner = new javax.swing.JPanel(
+        new java.awt.BorderLayout(0, 10));
+    inner.setBackground(AppTheme.BG_CARD);
+    inner.setBorder(javax.swing.BorderFactory.createEmptyBorder(
+        16, 20, 18, 20));
 
     javax.swing.JLabel lblLabel = new javax.swing.JLabel(label);
     lblLabel.setForeground(AppTheme.TEXT_SEC);
-    lblLabel.setFont(AppTheme.FONT_SMALL);
+    lblLabel.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 11));
 
     javax.swing.JLabel lblValue = new javax.swing.JLabel(value);
     lblValue.setForeground(accent);
     lblValue.setFont(AppTheme.FONT_PRICE);
 
-    javax.swing.JPanel inner = new javax.swing.JPanel(
-        new java.awt.BorderLayout(0, 8));
-    inner.setBackground(AppTheme.BG_CARD);
     inner.add(lblLabel, java.awt.BorderLayout.NORTH);
     inner.add(lblValue, java.awt.BorderLayout.CENTER);
 
-    card.add(inner, java.awt.BorderLayout.CENTER);
+    card.add(accentBar, java.awt.BorderLayout.NORTH);
+    card.add(inner,     java.awt.BorderLayout.CENTER);
     card.putClientProperty("valueLabel", lblValue);
 }
 

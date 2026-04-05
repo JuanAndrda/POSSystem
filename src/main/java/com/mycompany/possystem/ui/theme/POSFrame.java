@@ -26,7 +26,7 @@ public class POSFrame extends javax.swing.JFrame {
     initComponents();
 
     // ── Window settings ──────────────────────────────────────────────
-    setTitle("RetailPro POS — POS Screen");
+    setTitle("InterTech POS — POS Screen");
     setExtendedState(java.awt.Frame.MAXIMIZED_BOTH);
     setDefaultCloseOperation(EXIT_ON_CLOSE);
 
