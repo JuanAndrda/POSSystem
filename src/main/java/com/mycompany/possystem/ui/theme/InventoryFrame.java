@@ -313,7 +313,6 @@ private void showAddDialog() {
 
 // ── Show Edit Product dialog ──────────────────────────────────────────
 private void showEditDialog() {
-    // First check if a row is selected
     int row = tblInventory.getSelectedRow();
     if (row < 0) {
         javax.swing.JOptionPane.showMessageDialog(this,
@@ -321,8 +320,12 @@ private void showEditDialog() {
         return;
     }
 
-    // Get the selected product
-    com.mycompany.possystem.model.Product p = allProducts.get(row);
+    // Use the hidden ID column to find the correct product (survives filtering)
+    int productId = (int) tblInventory.getModel().getValueAt(row, 0);
+    com.mycompany.possystem.model.Product p = allProducts.stream()
+        .filter(prod -> prod.getId() == productId)
+        .findFirst().orElse(null);
+    if (p == null) return;
 
     // Create fields with existing values pre-filled
     javax.swing.JTextField fName  = new javax.swing.JTextField(p.getName());
@@ -392,7 +395,13 @@ private void deleteSelected() {
             "Please select a product to delete.");
         return;
     }
-    com.mycompany.possystem.model.Product p = allProducts.get(row);
+
+    // Use the hidden ID column to find the correct product (survives filtering)
+    int productId = (int) tblInventory.getModel().getValueAt(row, 0);
+    com.mycompany.possystem.model.Product p = allProducts.stream()
+        .filter(prod -> prod.getId() == productId)
+        .findFirst().orElse(null);
+    if (p == null) return;
     int confirm = javax.swing.JOptionPane.showConfirmDialog(
         this, "Delete \"" + p.getName() + "\"?",
         "Confirm Delete", javax.swing.JOptionPane.YES_NO_OPTION);
